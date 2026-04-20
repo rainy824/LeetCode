@@ -1,20 +1,23 @@
 name: Sync LeetCode
 on:
-  workflow_dispatch:      # 允许手动触发（用于全量同步历史）
+  workflow_dispatch:
   schedule:
-    - cron: "0 8 * * *"   # 每天北京时间 16:00 自动运行一次
+    - cron: "0 8 * * *"
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # 解决你看到的 Node.js 20 警告，提前适配 Node 24
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
-      - name: Sync
-        uses: joshcai/leetcode-sync@master
+      - name: Sync Submissions
+        # 使用目前修复了 API 迭代问题的维护版
+        uses: RicardoW7/leetcode-sync@v1
         with:
           github-token: ${{ secrets.GH_TOKEN }}
           leetcode-csrf-token: ${{ secrets.LEETCODE_CSRF_TOKEN }}
           leetcode-session: ${{ secrets.LEETCODE_SESSION }}
-          destination-folder: my-submissions # 代码存放目录
-          verbose: true
-          commit-header: '[LeetCode Sync]' # 提交信息前缀
-          leetcode-site: cn
+          destination-folder: submissions
+          # 该版本正确支持中国区切换
+          leetcode-site: 'cn'
