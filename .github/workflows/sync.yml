@@ -1,24 +1,20 @@
-name: Sync LeetCode CN to GitHub
-
+name: Sync LeetCode
 on:
-  workflow_dispatch:   # 允许手动运行
+  workflow_dispatch:      # 允许手动触发（用于全量同步历史）
   schedule:
-    - cron: "0 0 * * *"  # 每天0点同步
+    - cron: "0 8 * * *"   # 每天北京时间 16:00 自动运行一次
 
 jobs:
-  sync:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Sync
+        uses: joshcai/leetcode-sync@v1.7.0
         with:
-          node-version: 20
-
-      - name: Sync LeetCode CN
-        uses: "luoxuansmile/leetcode-sync-github@master"
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          leetcode_session: ${{ secrets.LEETCODE_SESSION }}
-          csrf_token: ${{ secrets.LEETCODE_CSRF_TOKEN }}
+          github-token: ${{ secrets.GH_TOKEN }}
+          leetcode-csrf-token: ${{ secrets.LEETCODE_CSRF_TOKEN }}
+          leetcode-session: ${{ secrets.LEETCODE_SESSION }}
+          destination-folder: my-submissions # 代码存放目录
+          verbose: true
+          commit-header: '[LeetCode Sync]' # 提交信息前缀
+          leetcode-site: cn
