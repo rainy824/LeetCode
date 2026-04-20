@@ -1,9 +1,9 @@
 name: Sync LeetCode CN to GitHub
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:  # 允许手动运行
   schedule:
-    - cron: "0 0 * *"
+    - cron: "0 0 * * *"  # 每天0点同步（正确5位 cron）
 
 jobs:
   build:
