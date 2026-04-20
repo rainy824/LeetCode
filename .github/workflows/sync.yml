@@ -1,17 +1,17 @@
-name: LeetCode Sync
+name: Sync LeetCode CN to GitHub
 
 on:
+  workflow_dispatch:
   schedule:
-    - cron: "0 0 * * *"  # 每天 UTC 0点运行
-  workflow_dispatch:     # 允许手动触发
+    - cron: "0 0 * *"
 
 jobs:
-  sync:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Sync LeetCode submissions
-        uses: joshcai/leetcode-sync@v1.7
+      - uses: actions/checkout@v4
+      - name: LeetCode CN Sync
+        uses: Zou8080/leetcode-cn-sync@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          leetcode_session: ${{ secrets.LEETCODE_SESSION }}
-          leetcode_csrf_token: ${{ secrets.LEETCODE_CSRF_TOKEN }}
+          leetcode_cookies: ${{ secrets.LEETCODE_CN_COOKIE }}
